@@ -110,26 +110,8 @@ def capture_conversation(user_id=None, user_type=None,date_=None, time_=None, pr
 )
     print(sql)
     rows = run_query(sql)
+    return rows
     
-    
-
-
-if __name__=="__main__":
-    capture_conversation(
-        user_id=345,
-        user_type='patient',
-        date_='2022-01-02',
-        time_='19:19:09',
-        prompt="prompt",
-        response="response"
-    )
-    
-    
-    
-    
-    
-    
-
 # state_name = st.sidebar.text_input('Patient ID:')
 
 # # Perform query.

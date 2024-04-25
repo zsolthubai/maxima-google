@@ -3,3 +3,4 @@ streamlit
 google-cloud-bigquery
 charset-normalizer==3.1.0
 chardet
+langchain-google-vertexai
