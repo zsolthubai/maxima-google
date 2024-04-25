@@ -11,6 +11,7 @@ The dashboard serves two goals:
 
 ### General Architecture
 
+![google_hackathon](https://github.com/zsolthubai/maxima-google/assets/145662011/c00564f7-77b9-4748-97f4-a849f73710e9)
 
 
 ### Installation and usage:
