@@ -8,11 +8,13 @@ At last, a Vector Store is used to provide symptom information from literature. 
 
 ### Installation and usage:
 To get started, you'll need to ensure you have the necessary tools and configurations in place.
-Prerequisites:
-Vertex AI by the Google Cloud Platform.
-LangChain: You'll need the langchain-google-vertexai Python package installed. This package allows LangChain to interact with Vertex AI's models.
-Google Cloud SDK: Ensure you have the google-cloud-sdk installed and configured. This enables command-line interaction with Google Cloud services.
+
+**Prerequisites:**
+- Vertex AI by the Google Cloud Platform.
+- LangChain: You'll need the langchain-google-vertexai Python package installed. This package allows LangChain to interact with Vertex AI's models.
+- Google Cloud SDK: Ensure you have the google-cloud-sdk installed and configured. This enables command-line interaction with Google Cloud services.
 Authentication: Proper authentication is required for accessing Vertex AI services.
+
 Resources:
 For detailed instructions on setting up and using LangChain with Vertex AI, refer to the following resources:
 LangChain Expression Language: https://python.langchain.com/docs/expression_language/get_started/
