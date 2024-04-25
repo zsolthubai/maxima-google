@@ -15,10 +15,10 @@ To get started, you'll need to ensure you have the necessary tools and configura
 - Google Cloud SDK: Ensure you have the google-cloud-sdk installed and configured. This enables command-line interaction with Google Cloud services.
 Authentication: Proper authentication is required for accessing Vertex AI services.
 
-Resources:
+**Resources:**
 For detailed instructions on setting up and using LangChain with Vertex AI, refer to the following resources:
-LangChain Expression Language: https://python.langchain.com/docs/expression_language/get_started/
-LangChain Google Vertex AI Palm Integration: https://python.langchain.com/docs/integrations/llms/google_vertex_ai_palm/
+- https://python.langchain.com/docs/expression_language/get_started/
+- https://python.langchain.com/docs/integrations/llms/google_vertex_ai_palm/
 
 ### How to use:
 1. Open Streamlit Dashboard by running: streamlit run streamlit_app.py
