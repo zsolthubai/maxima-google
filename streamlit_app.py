@@ -1,37 +1,58 @@
+from langchain.llms import VertexAI
+from langchain import PromptTemplate, LLMChain
+from langchain.memory import ConversationBufferMemory
 import streamlit as st
-from google.oauth2 import service_account
-from google.cloud import bigquery
+from utils import bq
 
-client = bigquery.Client()
+@st.cache_resource(show_spinner=False)
+def LLM_init():
+    template = """
+    Your name is Dr. AI. You are an asistant to a doctor treating childen with cancer.
+    {chat_history}
+        Human: {human_input}
+        Chatbot:"""
 
-# patient_name = st.sidebar.text_input('Patient name')
-# patient_number = st.sidebar.text_input('Patient number', type='password')
-
-state_name = st.sidebar.text_input('US state:')
-
-# Perform query.
-# Uses st.cache_data to only rerun when the query changes or after 10 min.
-@st.cache_data(ttl=600)
-def run_query(query):
-    query_job = client.query(query)
-    rows_raw = query_job.result()
-    # Convert to list of dicts. Required for st.cache_data to hash the return value.
-    rows = [dict(row) for row in rows_raw]
-    return rows
-
-sql = f"""
-SELECT subpopulation, avg(value) as avg_value FROM `bigquery-public-data.america_health_rankings.ahr` where
-lower(state_name) = "{state_name.lower()}"
-group by 1
-having subpopulation is not null"""
-
+    promptllm = PromptTemplate(template=template, input_variables=["chat_history","human_input"])
+    memory = ConversationBufferMemory(memory_key="chat_history")
     
-if st.button("Process"):
+    llm_chain = LLMChain(
+        prompt=promptllm, 
+        llm=VertexAI(), 
+        memory=memory, 
+        verbose=True
+    )
     
-    rows = run_query(sql)
-     
-    st.write(sql)
-    # Print results.
-    st.write("Results:")
-    for row in rows:
-        st.write(row['subpopulation'] + "✍️ " + str(row['avg_value']))
+    return llm_chain
+
+st.title(f'🦜🔗Hi! Welcome to the Maxima AI ChatBot.')
+button_pressed = False
+
+patient_id = st.sidebar.text_input('Patient ID')
+patient_name = st.sidebar.text_input('Patient full name')
+
+
+if (not patient_id) and (not patient_name):
+    st.info('🦜🔗 Please provide patient identification')
+    
+if patient_id or patient_name:
+    
+    st.info(bq.get_patient_records(patient_id, patient_name))
+    
+    if "messages" not in st.session_state:
+        st.session_state["messages"] = [{"role": "assistant", "content": f"Hi, my name is Dr. AI. I am your assistant, how can I help you with patient {patient_info}?"}]
+    
+    for msg in st.session_state.messages:
+       st.chat_message(msg["role"]).write(msg["content"])
+
+    if prompt := st.chat_input():
+
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        st.chat_message("user").write(prompt)
+        # with st.spinner('Preparing'):
+        llm_chain = LLM_init()
+        msg = llm_chain.predict(human_input=prompt)
+
+        #st.write(msg)
+
+        st.session_state.messages.append({"role": "assistant", "content": msg})
+        st.chat_message("assistant").write(msg)
