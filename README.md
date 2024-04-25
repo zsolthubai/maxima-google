@@ -30,10 +30,11 @@ For detailed instructions on setting up and using LangChain with Vertex AI, refe
 
 ### How to use:
 1. Open Streamlit Dashboard by running: streamlit run streamlit_app.py
-2. Select the Patient or Doctor tab.
+2. Select the Patient or Doctor tab (to be implemented).
 3. Enter Patient name on the left.
-4. If patient
-  4.1. Answer basic questionnaire (with sliders & emoji for children)
+4. Answer questionnaire (with sliders & emoji for children)
     - All information is combined in a prompt and context from similar case studies and vector store are added.
 5. Advice is generated using above prompt
 6. Summary of conversation and advice is stored for the doctor.
+7. We assume that BigQuery is supplied with patient data from a different frontend.
+8. We also assume that BigQuery is the data warehouse for chat history.
