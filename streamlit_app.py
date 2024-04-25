@@ -1,4 +1,5 @@
 import documents
+from datetime import date, datetime
 from langchain.memory import ConversationBufferMemory
 import streamlit as st
 from utils import bq
@@ -29,15 +30,16 @@ if not st.session_state["id_submitted"]:
     st.info("🔗 Please provide patient identification")
 
 with st.sidebar.form("form_name"):
-    patient_id = st.sidebar.text_input("Patient ID")
+    # patient_id = st.sidebar.text_input("Patient ID")
     patient_name = st.sidebar.text_input("Patient full name")
     submitted = st.form_submit_button("Submit")
 if submitted:
     st.session_state["id_submitted"] = True
-    st.info(f"Retreiving info for patient {patient_id}, {patient_name}")
+    st.info(f"Retreiving info for patient {patient_name}")
 
 if st.session_state["id_submitted"]:
-    patient_info_prompt = bq.get_patient_records(patient_id, patient_name)
+    patient_info_prompt = bq.get_patient_records(patient_name=patient_name)
+    patient_id = bq.get_patient_id(patient_name)
 
     if "clicked" not in st.session_state:
         st.session_state.clicked = False
@@ -75,9 +77,6 @@ if st.session_state["id_submitted"]:
         st.session_state["patient_state"] = patient_state
 
     if st.session_state.clicked:
-        # anxiety_questionaire = pq.anxiety_questionaire.getquestions()
-        # nausea_questionaire = pq.nausea_questionaire.getquestions()
-        # pain_questionaire = pq.pain_questionaire.getquestions()
         
         if "pain_slider" not in st.session_state:
             st.session_state["pain_slider"] = ""
@@ -115,6 +114,3 @@ if st.session_state["id_submitted"]:
             prompt = template.format(patient_info_prompt, "/n".join(f"Question:{question}, Answer:{st.session_state[element]}" for element, question in response_keys.items()) )
             msg = llm_chain(prompt)
             st.info(msg["response"])
-
-        # st.session_state.messages.append({"role": "assistant", "content": "Hi How can I help?"})
-        # st.chat_message("assistant").write(msg)
