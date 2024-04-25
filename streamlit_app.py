@@ -7,6 +7,11 @@ from langchain.chains import ConversationChain
 import patient_questions as pq
 
 
+response_keys={"patient_state":"How are you feeling today?",
+               "pain_slider":"How strong is your pain ?",
+               "pain_radio1":"What makes your pain worse?",
+               "pain_radio2":"What makes your pain better?"}
+
 @st.cache_resource(show_spinner=False)
 def LLM_init():
     # memory = ConversationBufferMemory(memory_key="chat_history")
@@ -107,7 +112,7 @@ if st.session_state["id_submitted"]:
 
             template = documents.instruction
             llm_chain = LLM_init()
-            prompt = template.format(patient_info_prompt, st.session_state["patient_state"])
+            prompt = template.format(patient_info_prompt, "/n".join(f"Question:{question}, Answer:{st.session_state[element]}" for element, question in response_keys.items()) )
             msg = llm_chain(prompt)
             st.info(msg["response"])
 
