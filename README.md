@@ -7,7 +7,7 @@ At last, a Vector Store is used to provide symptom information from literature. 
 
 The dashboard serves two goals:
 1. To be a compassionate companion for the children that provides emotional support, reassurance, and age-appropriate coping strategies.
-2. Alert doctors in case of progressively worsening symptoms.
+2. Alert doctors in case of progressively worsening symptoms and provide a summary
 
 ### General Architecture
 
