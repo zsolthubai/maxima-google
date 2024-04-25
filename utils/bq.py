@@ -85,6 +85,51 @@ def get_patient_records(patient_id=None, patient_name=None):
     """
     return return_string
 
+
+def capture_conversation(user_id=None, user_type=None,date_=None, time_=None, prompt=None,response=None):
+    """
+    user_id: patient_id or the doctor_id
+    user_type: patient/doctor
+    date: date of the conversation e.g: '2024-04-25'
+    time: time of the conversation e.g: '20:00:09'
+    prompt: prompt made.
+    reponse: reponse from GenAI
+    
+    
+    object: conversation object: { "prompt":"sample prompt","response":"sample response"}
+    """
+    sql = "INSERT INTO `qwiklabs-gcp-04-b01a5678dcab.{dataset_name}.{table_name}` ({id_field}, date, time, conversation) VALUES ({user_id_}, '{date}', '{time}', JSON '{{\"prompt\":\"{prompt_}\",\"response\":\"{response_}\"}}')".format(
+    dataset_name="p_data" if user_type == 'patient' else "d_data",
+    table_name="p_conversation" if user_type == 'patient' else "d_conversation",
+    id_field="patient_id" if user_type == 'patient' else "doctor_id",
+    user_id_=user_id,
+    date=date_,
+    time=time_,
+    prompt_=prompt,
+    response_=response    
+)
+    print(sql)
+    rows = run_query(sql)
+    
+    
+
+
+if __name__=="__main__":
+    capture_conversation(
+        user_id=345,
+        user_type='patient',
+        date_='2022-01-02',
+        time_='19:19:09',
+        prompt="prompt",
+        response="response"
+    )
+    
+    
+    
+    
+    
+    
+
 # state_name = st.sidebar.text_input('Patient ID:')
 
 # # Perform query.
