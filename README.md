@@ -1,9 +1,13 @@
 # Streamlit Dashboard for Evaluating daily symptomps
 
 This dashboard interacts with patients from the Princess Maxima Center of Pediatric Oncology. 
-It begins with a basic set of questions to evaluate daily symptomps and can generate follow-up questions if needed.
+It begins with a basic set of questions, that is easy to interact with, to evaluate daily symptomps and establish the current state of the patient. There is potential to make the questions more tailored to the needs of the patient.
 Combined with the patients background and similar case studies, context is provided downstream.
 At last, a Vector Store is used to provide symptom information from literature. ( not implemented )
+
+The dashboard serves two goals:
+1. To be a compassionate companion for the children that provides emotional support, reassurance, and age-appropriate coping strategies.
+2. 
 
 
 ### Installation and usage:
