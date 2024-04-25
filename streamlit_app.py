@@ -1,11 +1,9 @@
-import documents
-from datetime import date, datetime
+import doc
 from langchain.memory import ConversationBufferMemory
 import streamlit as st
 from utils import bq
 from langchain_google_vertexai import ChatVertexAI
 from langchain.chains import ConversationChain
-import patient_questions as pq
 
 
 response_keys={"patient_state":"How are you feeling today?",
@@ -29,8 +27,8 @@ if "id_submitted" not in st.session_state:
 if not st.session_state["id_submitted"]:
     st.info("🔗 Please provide patient identification")
 
+# Get patient name
 with st.sidebar.form("form_name"):
-    # patient_id = st.sidebar.text_input("Patient ID")
     patient_name = st.sidebar.text_input("Patient full name")
     submitted = st.form_submit_button("Submit")
 if submitted:
@@ -39,6 +37,8 @@ if submitted:
 
 if st.session_state["id_submitted"]:
     patient_info_prompt = bq.get_patient_records(patient_name=patient_name)
+    
+    # Extract patent background from BigQuery
     patient_id = bq.get_patient_id(patient_name)
 
     if "clicked" not in st.session_state:
@@ -47,6 +47,7 @@ if st.session_state["id_submitted"]:
     def click_button():
         st.session_state.clicked = True
 
+    # Question 1: Emoji question
     st.info(f'How are you feeling today {patient_name.split(" ")[0]}?')
     col1, col2, col3, col4, col5 = st.columns(5)
     with col1:
@@ -76,6 +77,7 @@ if st.session_state["id_submitted"]:
         patient_state = "I feel terrible and need immediate medical attention"
         st.session_state["patient_state"] = patient_state
 
+    # Extra questions related to pain
     if st.session_state.clicked:
         
         if "pain_slider" not in st.session_state:
@@ -109,8 +111,12 @@ if st.session_state["id_submitted"]:
         if pain_radio2:
             st.session_state["pain_radio2"] = pain_radio2
 
-            template = documents.instruction
+            template = doc.instruction
             llm_chain = LLM_init()
-            prompt = template.format(patient_info_prompt, "/n".join(f"Question:{question}, Answer:{st.session_state[element]}" for element, question in response_keys.items()) )
+            # Consturct prompt with appropriate patient details and question replies
+            prompt = template.format(patient_info_prompt, " ".join(f"Question:{question}\n Answer:{st.session_state[element]}" for element, question in response_keys.items()) )
             msg = llm_chain(prompt)
             st.info(msg["response"])
+            
+            
+# Here we would implement a proper chatbot
